@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap");
+
+* {
+    font-family: "Ubuntu", sans-serif;
+}
+
+.turbolinks-progress-bar {
+    height: 5px;
+    background-color: #fff9dd;
+}
+
+.navbar {
+    background-color: #222831 !important;
+}
+
+.nav-link {
+    text-align: center;
+    margin-right: 10px !important;
+    color: #ffd369 !important;
+    transition: 0.1s all ease-out;
+}
+.nav-link:hover {
+    font-weight: 400;
+    background-color: #393e46;
+    display: block;
+    border-radius: 7px;
+}
+
+.active {
+    font-weight: 400;
+    background-color: #393e46;
+    border: 1px solid #222831;
+    display: flex;
+    align-items: center;
+    padding: 2px 5px;
+    border-radius: 7px;
+}
+
+.button-create {
+    outline: none;
+    color: #ffd369;
+    padding: 4px 10px;
+    background-color: #222831;
+    border: 1px solid #fff9dd;
+    border-radius: 7px;
+    transition: 0.15s all ease-in-out;
+}
+.button-create:hover {
+    background-color: #393e46;
+    font-weight: 500;
+    color: #ffe699;
+    border: 1px solid #ffe699;
+}
+.page-item.active .page-link {
+    background-color: #393e46 !important;
+    border-color: #393e46 !important;
+    color: #fff9dd !important;
+}
+.navbar-toggler-icon {
+    color: #ffe699 !important;
+}
+
+.action-button {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    border-radius: 100px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0px;
+}
+.bg-green {
+    background-color: #ff9f45;
+}
+.bg-red {
+    background-color: #b33030;
+}
+
+.action-col {
+    display: flex !important;
+    flex-direction: row !important;
+    height: 100% !important;
+}
