@@ -28,6 +28,11 @@ return [
         },
         "delete_product_metafield" => function ($product_id, $metafield_id) use ($shopify_admin_api_version) {
             return "/admin/api/" . $shopify_admin_api_version . "/products/" . $product_id . "/metafields/" . $metafield_id . ".json";
-        }
+        },
+        "customers" => "/admin/api/" . $shopify_admin_api_version . "/customers.json",
+        "customer_metafields" => function ($customer_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/customers/" . $customer_id . "/metafields.json";
+        },
+        "collections" => "admin/api/" . $shopify_admin_api_version . "/collects.json"
     ],
 ];

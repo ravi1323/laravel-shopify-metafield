@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\collectionsController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShopifyController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['verify.shopify'])->group(function () {
+    // shops metafield routes
     Route::get('/', [ShopifyController::class, 'index'])->name('home');
     Route::get('/shop-create', [ShopifyController::class, 'create'])->name('shop_metafield_create');
     Route::post('/store-shop-metafield', [ShopifyController::class, 'store'])->name('store_shop_metafield');
@@ -23,13 +26,15 @@ Route::middleware(['verify.shopify'])->group(function () {
     Route::put('/update_shop_metafield', [ShopifyController::class, 'update'])->name('update_shop_metafield');
     Route::delete('/delete-shop-metafield', [ShopifyController::class, 'destroy'])->name('delete-shop-metafield');
 
-
+    // products metafield routes
     Route::get('/product', [ProductsController::class, 'index'])->name('product');
     Route::get('/product_metafield_create', [ProductsController::class, 'create'])->name('product_metafield_create');
     Route::post('/store-product-metafield', [ProductsController::class, 'store'])->name('store_product_metafield');
     Route::get('/edit_product_metafield', [ProductsController::class, 'edit'])->name('edit_product_metafield');
     Route::put('/update_product_metafield', [ProductsController::class, 'update'])->name('update_product_metafield');
-    Route::view('/customer', 'dashboard.customer_metafield')->name('customer');
-    Route::view('/collection', 'dashboard.collection_metafield')->name('collection');
+
+
+    Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
+    Route::get('/collection', [collectionsController::class, 'index'])->name('collection');
     Route::view('/variant', 'dashboard.variant_metafield')->name('variant');
 });
