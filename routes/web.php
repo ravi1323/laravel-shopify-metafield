@@ -32,9 +32,17 @@ Route::middleware(['verify.shopify'])->group(function () {
     Route::post('/store-product-metafield', [ProductsController::class, 'store'])->name('store_product_metafield');
     Route::get('/edit_product_metafield', [ProductsController::class, 'edit'])->name('edit_product_metafield');
     Route::put('/update_product_metafield', [ProductsController::class, 'update'])->name('update_product_metafield');
+    Route::delete('/delete-product-metafield', [ProductsController::class, 'destroy'])->name('delete-product-metafield');
 
 
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
+    Route::get('/product_customer_create', [CustomerController::class, 'create'])->name('product_customer_create');
+    Route::post('/store-customer-metafield', [CustomerController::class, 'store'])->name('store-customer-metafield');
+    Route::get('/edit_customer_metafield', [CustomerController::class, 'edit'])->name('edit_customer_metafield');
+    Route::put('/update_customer_metafield', [CustomerController::class, 'update'])->name('update_customer_metafield');
+    Route::delete('/delete-customer-metafield', [CustomerController::class, 'destroy'])->name('delete-customer-metafield');
+
+
     Route::get('/collection', [collectionsController::class, 'index'])->name('collection');
     Route::view('/variant', 'dashboard.variant_metafield')->name('variant');
 });

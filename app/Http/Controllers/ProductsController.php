@@ -24,7 +24,6 @@ class ProductsController extends Controller
          * collecting all metafield of all products
          */
         $products_metafields = [];
-        $products_that_has_metafield = [];
         foreach ($products as $product) {
             $product_metafield = $shop->api()->rest('GET', $shop_endpoints['product_metafield']($product["id"]))["body"]["metafields"];
             if (count($product_metafield) > 0) {
@@ -39,8 +38,7 @@ class ProductsController extends Controller
          * returning view with products and metafield
          */
         return view('dashboard.product_metafield', [
-            "products_metafields" => $products_metafields,
-            "products" => $products_that_has_metafield
+            "products_metafields" => $products_metafields
         ]);
     }
 
@@ -61,7 +59,6 @@ class ProductsController extends Controller
         foreach ($products as $product) {
             $product_metafields = $shop->api()->rest('GET', $shop_endpoints['product_metafield']($product["id"]))["body"]["metafields"];
             if (count($product_metafields) > 0) {
-                $products_metafields[$product["id"]] = $product_metafields;
                 foreach ($product_metafields as $product_metafield) {
                     array_push($namespaces, $product_metafield['namespace']);
                 }

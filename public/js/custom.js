@@ -1,4 +1,4 @@
-var base_url = "https://835e-103-54-21-38.ngrok.io";
+var base_url = "https://bf8c-103-54-21-38.ngrok.io";
 $(document).ready(function () {
     var table = $('#table').DataTable({
         "paging": true,
@@ -82,6 +82,7 @@ $(document).ready(function () {
                         namespace: err.responseJSON.errors.namespace == undefined ? "" : err.responseJSON.errors.namespace,
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
+                        type:err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type
                     };
                     $('#key-error').html(`${errors.key}`);
                     $('#key-namespace').html(`${errors.namespace}`);
@@ -220,7 +221,7 @@ $(document).ready(function () {
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
                         product_id:err.responseJSON.errors.product_id == undefined ? "" : err.responseJSON.errors.product_id,
-                        product_id:err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type
+                        type:err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type,
                     };
                     $('#key-error').html(`${errors.key}`);
                     $('#key-namespace').html(`${errors.namespace}`);
@@ -292,7 +293,150 @@ $(document).ready(function () {
                 product_id:product_id
             }
             $.ajax({
-                url: base_url + "/delete-shop-metafield",
+                url: base_url + "/delete-product-metafield",
+                type: 'DELETE',
+                /* send the csrf-token and the input to the controller */
+                data: delete_data,
+                dataType: 'JSON',
+                /* remind that 'data' is the response of the AjaxController */
+                success: function (response) {
+                    if(!response.errors)
+                    {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Product metafield deleted successfully.'
+                        })
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        } else {
+            return;
+        }
+    });
+
+    $('#create_customer_metafield').on('submit', function(event) {
+        event.preventDefault();
+        var form = $(this);
+        var boolean_conf = {on:true,off:false};
+        var formData = {
+            _token: event.target[0].value, // _token
+            key: event.target[1].value, // Key
+            namespace: event.target[2].value, // namespace
+            description: event.target[3].value, // description
+            customer: event.target[4].value, // customer
+            value_type: event.target[5].value, // value_type
+            value: (event.target[6].value == "on" || event.target[6].value == "off") && event.target[5].value == "boolean" ? boolean_conf[event.target[6].value] : event.target[6].value, // value
+            type: metafield_api_name
+        }
+        $.ajax({
+            url: base_url + "/store-customer-metafield",
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: formData,
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function (response) {
+                if (response.success)
+                {
+                    form.each(function() {
+                        this.reset();
+                    });
+                    $('#value').attr("disabled", true);
+                    $('#show_example').html('Please select type.');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Customer metafield created successfully.'
+                    })
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                if(!err.responseJSON.success)
+                {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Please try again with all fields.'
+                    });
+                    var errors = {
+                        key: err.responseJSON.errors.key == undefined ? "" : err.responseJSON.errors.key,
+                        namespace: err.responseJSON.errors.namespace == undefined ? "" : err.responseJSON.errors.namespace,
+                        description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
+                        value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
+                        customer:err.responseJSON.errors.customer == undefined ? "" : err.responseJSON.errors.customer,
+                        type:err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type
+                    };
+                    $('#key-error').html(`${errors.key}`);
+                    $('#key-namespace').html(`${errors.namespace}`);
+                    $('#show_example').html(`${errors.value}`);
+                    $('#customer-error').html(`${errors.customer}`);
+                    $('#value_type-error').html(`${errors.type}`);
+                }
+            }
+        }); // Key
+    });
+    $('#update_customer_metafield').on('submit', function(event) {
+        event.preventDefault();
+        var form = $(this);
+        var metafield_id = form.attr('data-id');
+        var boolean_conf = {on:true,off:false};
+        var formData = {
+            id:metafield_id,
+            _method:"PUT",
+            _token: event.target[0].value, // _token
+            customer: event.target[1].value, // product_id
+            description: event.target[4].value, // description
+            value_type: event.target[5].value, // value_type
+            value: (event.target[6].value == "on" || event.target[6].value == "off") && event.target[5].value == "boolean" ? boolean_conf[event.target[6].value] : event.target[6].value, // value
+            type: metafield_api_name
+        }
+        $.ajax({
+            url: base_url + "/update_customer_metafield",
+            type: 'PUT',
+            /* send the csrf-token and the input to the controller */
+            data: formData,
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function (response) {
+                if (response.success)
+                {
+                    console.log(response);
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Customer metafield updated successfully.'
+                    })
+                    window.location.replace(`${base_url}/customer`);
+                }
+            },
+            error: function (err) {
+                if(!err.responseJSON.success)
+                {
+                    var errors = {
+                        description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
+                        value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
+                    };
+                    $('#key-error').html(`${errors.key}`);
+                    $('#key-namespace').html(`${errors.namespace}`);
+                    $('#show_example').html(`${errors.value}`);
+                }
+            }
+        });
+    });
+    $('.delete_customer_metafield').on('click', function() {
+        var metafield_id = $(this).attr('id');
+        var customer_id = $(this).attr('data-customer');
+        var delete_button = $(this);
+        let user_permission = confirm(`Are you sure deleting metafield with id : ${metafield_id} ?`);
+        if(user_permission) {
+            delete_button.parents("tr").remove();
+            var delete_data = {
+                id:metafield_id,
+                customer_id:customer_id
+            }
+            $.ajax({
+                url: base_url + "/delete-customer-metafield",
                 type: 'DELETE',
                 /* send the csrf-token and the input to the controller */
                 data: delete_data,
