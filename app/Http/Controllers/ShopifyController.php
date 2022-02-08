@@ -149,8 +149,8 @@ class ShopifyController extends Controller
                     "namespace" => $request->namespace,
                     "key" => $request->key,
                     "value" => $request->value,
-                    "value_type" => $request->value_type == 'json' ? "json_string" : $request->value_type,
                     "type" => $request->type,
+                    "value_type" => $request->value_type == 'json' ? "json_string" : $request->value_type,
                     "description" => $request->description
                 ],
             ];

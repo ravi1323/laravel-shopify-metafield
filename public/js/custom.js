@@ -76,6 +76,7 @@ $(document).ready(function () {
                     $('#key-namespace').html('');
                     $('#show_example').html('');
                     $('#value_type-error').html('');
+                    window.location.replace(`${base_url}/`);
                 }
             },
             error: function (err) {
@@ -266,7 +267,6 @@ $(document).ready(function () {
             value: (event.target[6].value == "on" || event.target[6].value == "off") && event.target[5].value == "boolean" ? boolean_conf[event.target[6].value] : event.target[6].value, // value
             type: metafield_api_name
         }
-        console.log(formData);
         $.ajax({
             url: base_url + "/update_product_metafield",
             type: 'PUT',
@@ -277,26 +277,36 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success)
                 {
-                    console.log(response);
                     Toast.fire({
                         icon: 'success',
                         title: 'Product metafield updated successfully.'
                     })
+                    $('#key-error').html('');
+                    $('#key-namespace').html('');
+                    $('#show_example').html('');
+                    $('#product_id-error').html('');
+                    $('#value_type-error').html('');
                     window.location.replace(`${base_url}/product`);
                 }
             },
             error: function (err) {
                 if(!err.responseJSON.success)
                 {
-                    console.log(err.responseJSON);
-                    console.log(err.responseText);
                     var errors = {
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
                         product: err.responseJSON.errors.product == undefined ? "" : err.responseJSON.errors.product,
+                        type: err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type
                     };
-                    $('#key-error').html(`${errors.key}`);
+                    if(errors.type != undefined)
+                    {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'You can\'t change type of those metafield that created within shopify dashboard.'
+                        })
+                    }
                     $('#show_example').html(`${errors.value}`);
+                    $('#value_type-error').html(`${errors.type}`);
                 }
             }
         });
@@ -427,6 +437,11 @@ $(document).ready(function () {
                         icon: 'success',
                         title: 'Customer metafield updated successfully.'
                     })
+                    $('#key-error').html('');
+                    $('#key-namespace').html('');
+                    $('#show_example').html('');
+                    $('#product_id-error').html('');
+                    $('#value_type-error').html('');
                     window.location.replace(`${base_url}/customer`);
                 }
             },
@@ -437,9 +452,18 @@ $(document).ready(function () {
                     var errors = {
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
+                        type: err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type
                     };
+                    if(errors.type != undefined)
+                    {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'You can\'t change type of those metafield that created within shopify dashboard.'
+                        })
+                    }
                     $('#show_example').html(`${errors.value}`);
                     $('#description-error').html(`${errors.description}`);
+                    $('#value_type-error').html(`${errors.type}`);
                 }
             }
         });

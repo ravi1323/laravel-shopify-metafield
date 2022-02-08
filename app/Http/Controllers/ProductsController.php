@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use PhpParser\Node\Expr\Cast\String_;
 
 class ProductsController extends Controller
 {
@@ -179,9 +180,9 @@ class ProductsController extends Controller
                     "id" => $request->id,
                     "namespace" => $request->namespace,
                     "key" => $request->key,
-                    "value" => $request->value,
-                    "value_type" => $request->value_type == 'json' ? "json_string" : $request->value_type,
+                    "value" => (string)$request->value,
                     "type" => $request->type,
+                    "value_type" => $request->value_type == 'json' ? "json_string" : $request->value_type,
                     "description" => $request->description
                 ],
             ];

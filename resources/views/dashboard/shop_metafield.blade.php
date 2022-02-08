@@ -57,7 +57,7 @@
                                             {{ $shop_metafield["value"] }}
                                         @endif
                                     </td>
-                                    <td>{{ $shop_metafield["value_type"] }}</td>
+                                    <td>{{ $shop_metafield["value_type"] }} | {{ $shop_metafield["type"] }}</td>
                                     <td>{{ $shop_metafield["description"] }}</td>
                                     <td>{{ $shop_metafield["created_at"] }}</td>
                                     
