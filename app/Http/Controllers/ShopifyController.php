@@ -79,7 +79,15 @@ class ShopifyController extends Controller
             ];
             $shop_endpoints = Config::get('constants.api_endpoints');
             $shop_metafield = $shop->api()->rest('POST', $shop_endpoints["shop_metafield"], $metafield);
-            return Response::json(array('success' => true, "shopify_response" => $shop_metafield, "metafield" => $metafield), 200);
+            if ($shop_metafield['errors']) {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $shop_metafield["body"],
+                    "submitted" => $request->input()
+                ), 400);
+            } else {
+                return Response::json(array('success' => true, "shopify_response" => $shop_metafield, "metafield" => $metafield), 200);
+            }
         }
     }
 
@@ -146,9 +154,16 @@ class ShopifyController extends Controller
                     "description" => $request->description
                 ],
             ];
-            $shop_endpoints = Config::get('constants.api_endpoints');
             $shop_metafield = $shop->api()->rest('PUT', $shop_endpoints["update_shop_metafield"]($request->id), $metafield);
-            return Response::json(array('success' => true, "shopify_response" => $shop_metafield, "metafield" => $metafield), 200);
+            if ($shop_metafield['errors']) {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $shop_metafield["body"],
+                    "submitted" => $request->input()
+                ), 400);
+            } else {
+                return Response::json(array('success' => true, "shopify_response" => $shop_metafield, "metafield" => $metafield), 200);
+            }
         }
     }
 

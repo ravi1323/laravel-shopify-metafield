@@ -83,7 +83,7 @@ class ProductsController extends Controller
             "value_type" => 'required',
             "type" => "required",
             "namespace" => "required",
-            "product_id" => "required",
+            "product" => "required",
             "value" => "required|" . $type_validation
         );
         $validate = Validator::make($request->input(), $validation_rules);
@@ -107,8 +107,16 @@ class ProductsController extends Controller
                 ],
             ];
             $shop_endpoints = Config::get('constants.api_endpoints');
-            $shop_metafield = $shop->api()->rest('POST', $shop_endpoints["store_product_metafield"]($request->product_id), $metafield);
-            return Response::json(array('success' => true, "shopify_response" => $shop_metafield, "metafield" => $metafield), 200);
+            $product_metafield = $shop->api()->rest('POST', $shop_endpoints["store_product_metafield"]($request->product), $metafield);
+            if ($product_metafield['errors']) {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => $product_metafield["body"],
+                    "submitted" => $request->input()
+                ), 400);
+            } else {
+                return Response::json(array('success' => true, "shopify_response" => $product_metafield, "metafield" => $metafield), 200);
+            }
         }
     }
 
@@ -142,7 +150,7 @@ class ProductsController extends Controller
          */
         $shop_endpoints = Config::get('constants.api_endpoints');
         $shop = Auth::user();
-        $product_metafield_by_id = $shop->api()->rest('GET', $shop_endpoints['single_product_metafield']($request->product_id, $request->id))["body"]["metafield"];
+        $product_metafield_by_id = $shop->api()->rest('GET', $shop_endpoints['single_product_metafield']($request->product, $request->id))["body"]["metafield"];
 
 
         $boolean_conf = ["true" => true, "false" => false];
@@ -153,6 +161,7 @@ class ProductsController extends Controller
             "key" => "required",
             "value_type" => 'required',
             "type" => "required",
+            "product" => "required",
             "namespace" => "required",
             "value" => "required|" . $type_validation
         );
@@ -167,6 +176,7 @@ class ProductsController extends Controller
             $shop = Auth::user();
             $metafield = [
                 "metafield" => [
+                    "id" => $request->id,
                     "namespace" => $request->namespace,
                     "key" => $request->key,
                     "value" => $request->value,
@@ -175,8 +185,7 @@ class ProductsController extends Controller
                     "description" => $request->description
                 ],
             ];
-            $shop_endpoints = Config::get('constants.api_endpoints');
-            $product_metafield = $shop->api()->rest('PUT', $shop_endpoints["update_product_metafield"]($request->product_id, $request->id), $metafield);
+            $product_metafield = $shop->api()->rest('PUT', $shop_endpoints["update_product_metafield"]($request->product, $request->id), $metafield);
             if ($product_metafield['errors']) {
                 return Response::json(array(
                     'success' => false,

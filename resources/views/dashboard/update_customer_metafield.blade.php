@@ -39,6 +39,7 @@
                             <div class="form-group">
                                 <label for="description">Description <b><small>(optional)</small></b></label>
                                 <textarea name="description" id="description" rows="3" placeholder="Enter Description" class="form-control">{{ $customer_metafield_by_id["description"] }}</textarea>
+                                <span id="description-error"></span>
                             </div>
                         </div>
                     </div>

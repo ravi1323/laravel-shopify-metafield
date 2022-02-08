@@ -1,4 +1,4 @@
-var base_url = "https://bf8c-103-54-21-38.ngrok.io";
+var base_url = "https://56f0-103-54-21-38.ngrok.io";
 $(document).ready(function () {
     var table = $('#table').DataTable({
         "paging": true,
@@ -72,11 +72,19 @@ $(document).ready(function () {
                         icon: 'success',
                         title: 'Shop metafield created successfully.'
                     })
+                    $('#key-error').html('');
+                    $('#key-namespace').html('');
+                    $('#show_example').html('');
+                    $('#value_type-error').html('');
                 }
             },
             error: function (err) {
                 if(!err.responseJSON.success)
                 {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Please try again with all fields.'
+                    });
                     var errors = {
                         key: err.responseJSON.errors.key == undefined ? "" : err.responseJSON.errors.key,
                         namespace: err.responseJSON.errors.namespace == undefined ? "" : err.responseJSON.errors.namespace,
@@ -139,6 +147,7 @@ $(document).ready(function () {
             value: (event.target[5].value == "on" || event.target[5].value == "off") && event.target[4].value == "boolean" ? boolean_conf[event.target[5].value] : event.target[5].value, // value
             type: metafield_api_name
         }
+        console.log(formData);
         $.ajax({
             url: base_url + "/update_shop_metafield",
             type: 'PUT',
@@ -153,13 +162,19 @@ $(document).ready(function () {
                         icon: 'success',
                         title: 'Shop metafield updated successfully.'
                     })
-                    window.location.replace(`${base_url}/`);
+                    $('#key-error').html('');
+                    $('#key-namespace').html('');
+                    $('#show_example').html('');
                 }
             },
             error: function (err) {
                 if(!err.responseJSON.success)
                 {
-                    console.log(err);
+                    console.log(err.responseJSON);
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Please try again with all fields.'
+                    });
                     var errors = {
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
@@ -180,12 +195,11 @@ $(document).ready(function () {
             key: event.target[1].value, // Key
             namespace: event.target[2].value, // namespace
             description: event.target[3].value, // description
-            product_id: event.target[4].value, // product
+            product: event.target[4].value, // product
             value_type: event.target[5].value, // value_type
             value: (event.target[6].value == "on" || event.target[6].value == "off") && event.target[5].value == "boolean" ? boolean_conf[event.target[6].value] : event.target[6].value, // value
             type: metafield_api_name
         }
-        console.log(formData);
         $.ajax({
             url: base_url + "/store-product-metafield",
             type: 'POST',
@@ -205,6 +219,11 @@ $(document).ready(function () {
                         icon: 'success',
                         title: 'Product metafield created successfully.'
                     })
+                    $('#key-error').html('');
+                    $('#key-namespace').html('');
+                    $('#show_example').html('');
+                    $('#product_id-error').html('');
+                    $('#value_type-error').html('');
                 }
             },
             error: function (err) {
@@ -220,13 +239,13 @@ $(document).ready(function () {
                         namespace: err.responseJSON.errors.namespace == undefined ? "" : err.responseJSON.errors.namespace,
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
-                        product_id:err.responseJSON.errors.product_id == undefined ? "" : err.responseJSON.errors.product_id,
+                        product:err.responseJSON.errors.product == undefined ? "" : err.responseJSON.errors.product,
                         type:err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type,
                     };
                     $('#key-error').html(`${errors.key}`);
                     $('#key-namespace').html(`${errors.namespace}`);
                     $('#show_example').html(`${errors.value}`);
-                    $('#product_id-error').html(`${errors.product_id}`);
+                    $('#product_id-error').html(`${errors.product}`);
                     $('#value_type-error').html(`${errors.type}`);
                 }
             }
@@ -241,7 +260,7 @@ $(document).ready(function () {
             id:metafield_id,
             _method:"PUT",
             _token: event.target[0].value, // _token
-            product_id: event.target[1].value, // product_id
+            product: event.target[1].value, // product_id
             description: event.target[4].value, // description
             value_type: event.target[5].value, // value_type
             value: (event.target[6].value == "on" || event.target[6].value == "off") && event.target[5].value == "boolean" ? boolean_conf[event.target[6].value] : event.target[6].value, // value
@@ -269,13 +288,14 @@ $(document).ready(function () {
             error: function (err) {
                 if(!err.responseJSON.success)
                 {
-                    console.log(err);
+                    console.log(err.responseJSON);
+                    console.log(err.responseText);
                     var errors = {
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
+                        product: err.responseJSON.errors.product == undefined ? "" : err.responseJSON.errors.product,
                     };
                     $('#key-error').html(`${errors.key}`);
-                    $('#key-namespace').html(`${errors.namespace}`);
                     $('#show_example').html(`${errors.value}`);
                 }
             }
@@ -413,13 +433,13 @@ $(document).ready(function () {
             error: function (err) {
                 if(!err.responseJSON.success)
                 {
+                    console.log(err.responseJSON);
                     var errors = {
                         description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
                         value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
                     };
-                    $('#key-error').html(`${errors.key}`);
-                    $('#key-namespace').html(`${errors.namespace}`);
                     $('#show_example').html(`${errors.value}`);
+                    $('#description-error').html(`${errors.description}`);
                 }
             }
         });

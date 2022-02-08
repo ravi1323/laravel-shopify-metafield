@@ -42,6 +42,12 @@ return [
         "delete_customer_metafield" => function ($customer_id, $metafield_id) use ($shopify_admin_api_version) {
             return "/admin/api/" . $shopify_admin_api_version . "/customers/" . $customer_id . "/metafields/" . $metafield_id . ".json";
         },
-        "collections" => "admin/api/" . $shopify_admin_api_version . "/collects.json"
+        "collections" => "/admin/api/" . $shopify_admin_api_version . "/collects.json",
+        "collection_metafields" => function ($collection_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . "/metafields.json";
+        },
+        "single_collection" => function ($collection_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . ".json";
+        }
     ],
 ];
