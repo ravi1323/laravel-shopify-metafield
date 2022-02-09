@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <a href="{{ route('product_customer_create') }}" class="btn btn-success">Create</a>
+                <a href="{{ route('create_collection_metafield') }}" class="btn btn-success">Create</a>
               </ol>
             </div>
           </div>
@@ -53,10 +53,10 @@
                                 @foreach ($collections_metafield as $collection_metafield)
                                     <tr>
                                         <td class="action-col">
-                                            <a href="{{ route('edit_customer_metafield', ['id'=>$collection_metafield["id"], 'collection_id'=>$collection_id]) }}" class="ml-1 action-button bg-green">
+                                            <a href="{{ route('edit_collection_metafield', ['id'=>$collection_metafield["id"], 'collection_id'=>$collection_id]) }}" class="ml-1 action-button bg-green">
                                                 <i class="fas fa-pen"></i>
                                             </a>
-                                            <button class="ml-2 action-button bg-red delete_customer_metafield" id="{{ $collection_metafield["id"] }}" data-customer="{{ $collection_id }}">
+                                            <button class="ml-2 action-button bg-red delete_collection_metafield" id="{{ $collection_metafield["id"] }}" data-collection="{{ $collection_id }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </td>

@@ -48,6 +48,18 @@ return [
         },
         "single_collection" => function ($collection_id) use ($shopify_admin_api_version) {
             return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . ".json";
+        },
+        "store_collection_metafield" => function ($collection_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . "/metafields.json";
+        },
+        "single_collection_metafield" => function ($collection_id, $metafield_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . "/metafields/" . $metafield_id . ".json";
+        },
+        "update_collection_metafield" => function ($collection_id, $metafield_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/products/" . $collection_id . "/metafields/" . $metafield_id . ".json";
+        },
+        "delete_collection_metafield" => function ($collection_id, $metafield_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . "/metafields/" . $metafield_id . ".json";
         }
     ],
 ];

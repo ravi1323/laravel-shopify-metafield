@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <a href="{{ route('product_customer_create') }}" class="btn btn-success">Create</a>
+                <a href="{{ route('create_customer_metafield') }}" class="btn btn-success">Create</a>
               </ol>
             </div>
           </div>
