@@ -662,4 +662,206 @@ $(document).ready(function () {
             return;
         }
     });
+    $('.product_select').on('change', function() {
+        var product_id = $(this).val();
+        var request_data = {
+            product_id
+        }
+        if(/^\d+$/.test(request_data.product_id))
+        {
+            console.log("digit value.");
+            $('#variant_id').removeAttr('disabled');
+            $("product_id-error").html('');
+            $.ajax({
+                url: base_url + "/get_product_variants",
+                type: 'GET',
+                /* send the csrf-token and the input to the controller */
+                data: request_data,
+                dataType: 'JSON',
+                /* remind that 'data' is the response of the AjaxController */
+                success: function (response) {
+                    if(!response.errors)
+                    {
+                        var variant_options = `<option value="">--SELECT--</option>`;
+                        response.shopify_response.forEach(variant => {
+                            variant_options += `<option value="${variant.id}">${variant.title}</option>`;
+                        });
+                        $('.select-variant').html(variant_options);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        } else {
+            console.log("not digit value.");
+            $('#variant_id').attr('disabled', true);
+            $("product_id-error").html('Product is required field.');
+        }
+    });
+    $('#create_variant_metafield').on('submit', function(event) {
+        event.preventDefault();
+        var form = $(this);
+        var boolean_conf = {on:true,off:false};
+        var formData = {
+            _token: event.target[0].value, // _token
+            key: event.target[1].value, // Key
+            namespace: event.target[2].value, // namespace
+            description: event.target[3].value, // description
+            product: event.target[4].value, // collection
+            variant: event.target[5].value, // collection
+            value_type: event.target[6].value, // value_type
+            value: (event.target[7].value == "on" || event.target[7].value == "off") && event.target[6].value == "boolean" ? boolean_conf[event.target[7].value] : event.target[7].value, // value
+            type: metafield_api_name
+        }
+        $.ajax({
+            url: base_url + "/store-variant-metafield",
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: formData,
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function (response) {
+                if (response.success)
+                {
+                    form.each(function() {
+                        this.reset();
+                    });
+                    $('#value').attr("disabled", true);
+                    $('#show_example').html('Please select type.');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Variant metafield created successfully.'
+                    })
+                    $('#key-error').html('');
+                    $('#key-namespace').html('');
+                    $('#show_example').html('');
+                    $('#product_id-error').html('');
+                    $('#value_type-error').html('');
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                if(!err.responseJSON.success)
+                {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Please try again with all fields.'
+                    });
+                    var errors = {
+                        key: err.responseJSON.errors.key == undefined ? "" : err.responseJSON.errors.key,
+                        namespace: err.responseJSON.errors.namespace == undefined ? "" : err.responseJSON.errors.namespace,
+                        description: err.responseJSON.errors.description == undefined ? "" : err.responseJSON.errors.description,
+                        value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
+                        product:err.responseJSON.errors.product == undefined ? "" : err.responseJSON.errors.product,
+                        variant:err.responseJSON.errors.variant == undefined ? "" : err.responseJSON.errors.variant,
+                        type:err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type,
+                    };
+                    $('#key-error').html(`${errors.key}`);
+                    $('#key-namespace').html(`${errors.namespace}`);
+                    $('#show_example').html(`${errors.value}`);
+                    $('#product_id-error').html(`${errors.product}`);
+                    $('#value_type-error').html(`${errors.type}`);
+                    $('#variant_id-error').html(`${errors.variant}`);
+                }
+            }
+        }); // Key
+    });
+    $('#update_variant_metafield').on('submit', function(event) {
+        event.preventDefault();
+        var form = $(this);
+        $('.button-update').toggleClass('loading');
+        var metafield_id = form.attr('data-id');
+        var boolean_conf = {on:true,off:false};
+        var formData = {
+            id:metafield_id,
+            _method:"PUT",
+            _token: event.target[0].value, // _token
+            variant: event.target[1].value, // product_id
+            description: event.target[4].value, // description
+            value_type: event.target[5].value, // value_type
+            value: (event.target[6].value == "on" || event.target[6].value == "off") && event.target[5].value == "boolean" ? boolean_conf[event.target[6].value] : event.target[6].value, // value
+            type: metafield_api_name
+        }
+        $.ajax({
+            url: base_url + "/update_variant_metafield",
+            type: 'PUT',
+            /* send the csrf-token and the input to the controller */
+            data: formData,
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function (response) {
+                if (response.success)
+                {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Variant metafield updated successfully.'
+                    })
+                    $('#key-error').html('');
+                    $('#key-namespace').html('');
+                    $('#show_example').html('');
+                    $('#product_id-error').html('');
+                    $('#value_type-error').html('');
+                    $('.button-update').toggleClass('loading');
+                    window.location.replace(`${base_url}/variant`);
+                }
+            },
+            error: function (err) {
+                if(!err.responseJSON.success)
+                {
+                    console.log(err.responseJSON);
+                    var errors = {
+                        value: err.responseJSON.errors.value == undefined ? "" : err.responseJSON.errors.value,
+                        product: err.responseJSON.errors.product == undefined ? "" : err.responseJSON.errors.product,
+                        type: err.responseJSON.errors.type == undefined ? "" : err.responseJSON.errors.type
+                    };
+                    if(errors.type != undefined)
+                    {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'You can\'t change type of those metafield that created within shopify dashboard.'
+                        })
+                    }
+                    $('#show_example').html(`${errors.value}`);
+                    $('#value_type-error').html(`${errors.type}`);
+                }
+            }
+        });
+    });
+    $('.delete_variant_metafield').on('click', function() {
+        
+        var metafield_id = $(this).attr('id');
+        var variant_id = $(this).attr('data-variant');
+        var delete_button = $(this);
+        let user_permission = confirm(`Are you sure deleting metafield with id : ${metafield_id} ?`);
+        if(user_permission) {
+            delete_button.parents("tr").remove();
+            var delete_data = {
+                id:metafield_id,
+                variant_id:variant_id
+            }
+            $.ajax({
+                url: base_url + "/delete-variant-metafield",
+                type: 'DELETE',
+                /* send the csrf-token and the input to the controller */
+                data: delete_data,
+                dataType: 'JSON',
+                /* remind that 'data' is the response of the AjaxController */
+                success: function (response) {
+                    if(!response.errors)
+                    {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Variant metafield deleted successfully.'
+                        })
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        } else {
+            return;
+        }
+    });
 });

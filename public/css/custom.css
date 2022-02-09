@@ -85,3 +85,109 @@
     flex-direction: row !important;
     height: 100% !important;
 }
+.button-update {
+    background: #49d75c;
+    border: 0px solid #49d75c;
+    border-radius: 35px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.25s ease;
+    width: 210px;
+    position: relative;
+    height: 60px;
+    overflow: hidden;
+}
+.button-update:not(.loading):hover {
+    box-shadow: 0px 10px 25px 0px rgba(73, 215, 92, 0.4);
+}
+.button-update:not(.loading):hover i {
+    transform: translate(7px);
+}
+.button-update i {
+    font-size: 1.45rem;
+    position: absolute;
+    left: 0px;
+    pointer-events: none;
+    z-index: 10;
+    background: inherit;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.25s ease;
+}
+.button-update .text {
+    width: 120px;
+    display: block;
+    position: relative;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    position: absolute;
+    left: 60px;
+}
+.loading-animate {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    z-index: 100;
+    border-radius: 50%;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.25s ease;
+}
+.loading-animate:after {
+    content: "";
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-left: 3px solid #fff;
+    animation: loading infinite 0.8s ease 0.05s;
+    position: absolute;
+}
+.loading-animate:before {
+    content: "";
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-left: 3px solid #fff;
+    animation: loading infinite 0.8s linear;
+    position: absolute;
+    opacity: 0.6;
+}
+.button-update.loading {
+    width: 60px;
+}
+.button-update.loading i {
+    transform: rotate(-90deg);
+    padding-bottom: 4px;
+    padding-left: 3px;
+}
+.button-update.loading .text {
+    transform: translate(-140px);
+}
+.button-update.loading .loading-animate {
+    opacity: 1;
+}
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

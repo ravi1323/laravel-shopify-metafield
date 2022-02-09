@@ -60,6 +60,24 @@ return [
         },
         "delete_collection_metafield" => function ($collection_id, $metafield_id) use ($shopify_admin_api_version) {
             return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . "/metafields/" . $metafield_id . ".json";
-        }
+        },
+        "variants" => function ($product_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/products/" . $product_id . "/variants.json";
+        },
+        "variant_metafields" => function ($variant_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/variants/" . $variant_id . "/metafields.json";
+        },
+        "store_variant_metafield" => function ($variant_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/variants/" . $variant_id . "/metafields.json";
+        },
+        "single_variant_metafield" => function ($variant_id, $metafield_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/variants/" . $variant_id . "/metafields/" . $metafield_id . ".json";
+        },
+        "update_variant_metafield" => function ($variant_id, $metafield_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/variants/" . $variant_id . "/metafields/" . $metafield_id . ".json";
+        },
+        "delete_variant_metafield" => function ($collection_id, $metafield_id) use ($shopify_admin_api_version) {
+            return "/admin/api/" . $shopify_admin_api_version . "/collections/" . $collection_id . "/metafields/" . $metafield_id . ".json";
+        },
     ],
 ];

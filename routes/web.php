@@ -4,6 +4,7 @@ use App\Http\Controllers\collectionsController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShopifyController;
+use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,5 +51,11 @@ Route::middleware(['verify.shopify'])->group(function () {
     Route::put('/update_collection_metafield', [collectionsController::class, 'update'])->name('update_collection_metafield');
     Route::delete('/delete-collection-metafield', [collectionsController::class, 'destroy'])->name('delete-collection-metafield');
 
-    Route::view('/variant', 'dashboard.variant_metafield')->name('variant');
+    Route::get('/variant', [VariantController::class, 'index'])->name('variant');
+    Route::get('/create_variant_metafield', [VariantController::class, 'create'])->name('create_variant_metafield');
+    Route::get('/get_product_variants', [VariantController::class, 'get_product_variants'])->name('get_product_variants');
+    Route::post('/store-variant-metafield', [VariantController::class, 'store'])->name('store-variant-metafield');
+    Route::get('/edit_variant_metafield', [VariantController::class, 'edit'])->name('edit_variant_metafield');
+    Route::put('/update_variant_metafield', [VariantController::class, 'update'])->name('update_variant_metafield');
+    Route::delete('/delete-variant-metafield', [VariantController::class, 'destroy'])->name('delete-variant-metafield');
 });
